@@ -20,7 +20,7 @@ final class ViewModel: ObservableObject {
     var canMoreLoad = false
     
     init() {
-        $searchText.sink { [weak self] searchText in
+        $searchText.debounce(for: .milliseconds(500), scheduler: RunLoop.main).sink { [weak self] searchText in
             guard let self = self else { return }
             self.fetchData(page: currentPage, searchText: searchText)
         }.store(in: &cancellables)
