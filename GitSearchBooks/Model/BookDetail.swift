@@ -43,6 +43,26 @@ struct DetailBook: Codable {
         case storeURL = "url"
         case pdfInfo = "pdf"
     }
+    
+    static let emptyDetailBook = DetailBook(
+        error: "",
+        title: "",
+        subtitle: "",
+        authors: "",
+        publisher: "",
+        language: "",
+        isbnShotNumber: "",
+        isbnLongNumber: "",
+        pages: "",
+        year: "",
+        rating: "",
+        descripiton: "",
+        price: "",
+        imageURL: "",
+        storeURL: "",
+        pdfInfo: nil
+    )
+    
 }
 
 struct PDFInfo: Codable {
