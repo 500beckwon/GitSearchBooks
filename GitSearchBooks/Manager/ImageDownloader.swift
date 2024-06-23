@@ -22,11 +22,11 @@ class ImageLoader: ObservableObject {
             return
         }
         
-        cancellable =   BookImageRequest.requestBookImage(isbn: isbn)
+        cancellable = BookImageRequest.requestBookImage(isbn: isbn)
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] imageData in
-                
                 guard let self = self, let imageData = imageData else { return }
                 ImageCache
                     .shared
@@ -34,7 +34,6 @@ class ImageLoader: ObservableObject {
                                   imageData: imageData)
                 
                 DispatchQueue.main.async {
-                    
                     self.image = UIImage(data: imageData)
                 }
             }
