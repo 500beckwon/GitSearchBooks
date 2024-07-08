@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 final class BookImageRequest {
     static func requestBookImage(isbn: String, completion: @escaping((Result<Data, Error>) -> Void)) {

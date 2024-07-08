@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct BookDetailView: View {
-    @ObservedObject var viewModel: BookDetailViewModel
+    @StateObject private var viewModel: BookDetailViewModel
     @Environment(\.presentationMode) var presentationMode
-
+    var isbn: String
+    
+    init(isbn: String) {
+        self.isbn = isbn
+        _viewModel = StateObject(wrappedValue: BookDetailViewModel(isbn: isbn))
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             
@@ -30,7 +36,6 @@ struct BookDetailView: View {
             
             Text("Price: \(viewModel.detailBook.price)")
                 .font(.body)
-            
 
             Text("ISBN: \(viewModel.detailBook.isbnLongNumber)")
                 .font(.body)
@@ -50,6 +55,7 @@ struct BookDetailView: View {
             )
         }
         .onAppear {
+            viewModel.fetchData()
         }
     }
     

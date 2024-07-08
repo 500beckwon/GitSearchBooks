@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 final class NetworkRequest<T: Codable> {
     
@@ -93,6 +94,25 @@ final class NetworkRequest<T: Codable> {
                     throw NetworkError.inValidError
                 }
                 return output.data as? T
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func requestImage() -> AnyPublisher<UIImage?, Error> {
+        guard let url = makeURL(apiRequest) else {
+            return Fail(error: NetworkError.badURL).eraseToAnyPublisher()
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap { output in
+                guard let response = output.response as? HTTPURLResponse,
+                      200..<300 ~= response.statusCode else {
+                    throw NetworkError.inValidError
+                }
+                guard let image = UIImage(data: output.data) else {
+                    throw NetworkError.decodingError
+                }
+                return image
             }
             .eraseToAnyPublisher()
     }

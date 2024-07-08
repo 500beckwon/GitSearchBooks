@@ -12,7 +12,7 @@ struct FavoritesView: View {
     
     var body: some View {
         List(viewModel.favoriteBooks) { item in
-            NavigationLink(destination: BookDetailView(viewModel: BookDetailViewModel(isbn: item.isbnNumber))) {
+            NavigationLink(destination: BookDetailView(isbn: item.isbnNumber)) {
                 HStack {
                     AsyncImageView(isbn: item.isbnNumber)
                         .clipped()

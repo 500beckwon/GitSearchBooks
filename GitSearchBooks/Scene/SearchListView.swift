@@ -18,7 +18,7 @@ struct SearchListView: View {
                 SearchBar(text: $viewModel.searchText)
                 
                 List(viewModel.filteredItems) { item in
-                    NavigationLink(destination: BookDetailView(viewModel: BookDetailViewModel(isbn: item.isbnNumber))) {
+                    NavigationLink(destination: BookDetailView(isbn: item.isbnNumber)) {
                         HStack {
                             AsyncImageView(isbn: item.isbnNumber)
                                 .clipped()
