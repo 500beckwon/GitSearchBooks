@@ -10,7 +10,8 @@ import SwiftUI
 struct SearchListView: View {
     @State private var searchText: String = ""
     @StateObject private var viewModel = ViewModel()
-    
+    @StateObject private var favoriteviewModel = FavoriteViewModel()
+       
     var body: some View {
         NavigationView {
             VStack {
@@ -20,7 +21,6 @@ struct SearchListView: View {
                     NavigationLink(destination: BookDetailView(viewModel: BookDetailViewModel(isbn: item.isbnNumber))) {
                         HStack {
                             AsyncImageView(isbn: item.isbnNumber)
-                            
                                 .clipped()
                                 .frame(width: 100, height: 100)
                                 .cornerRadius(8)
@@ -33,6 +33,15 @@ struct SearchListView: View {
                                     .font(.system(size: 12))
                                     .padding(.top, 5)
                             }
+                            
+                            Button(action: {
+                                favoriteviewModel.toggleFavorite(book: item)
+                            }) {
+                                Image(systemName: favoriteviewModel.isFavorite(book: item) ? "star.fill" : "star")
+                                    .foregroundColor(favoriteviewModel.isFavorite(book: item) ? .yellow : .gray)
+                            }
+                            .buttonStyle(BorderlessButtonStyle()) // List 내에서 Button 클릭을 위해 추가
+                            
                         }.onAppear {
                             if viewModel.filteredItems.last == item {
                                 viewModel.loadMoreData()
@@ -42,11 +51,10 @@ struct SearchListView: View {
                 }
                 Spacer()
             }
-        }.navigationBarTitle("iBookSearch")
-        
+            .navigationBarTitle("iBookSearch")
+            .navigationBarItems(trailing: NavigationLink(destination: FavoritesView(viewModel: favoriteviewModel)) {
+                Text("Favorites")
+            })
+        }
     }
-}
-
-#Preview {
-    SearchListView()
 }
